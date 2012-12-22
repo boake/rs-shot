@@ -3,7 +3,7 @@ Simple tool to resave multiple bloated mplayer2 screenshots. Requires GIMP and R
 
 ## Install
 Place resave-image.scm in your GIMP scripts folder for example: ~/.gimp-2.8/scripts/.   
-Move rs-shot to a location in your $PATH. 
+Give permissions to rs-shot with `chmod a+x rs-shot` and move rs-shot to a location in your $PATH.
 
 ## Use
 Simply run rs-shot in the directory with your bloated files.
