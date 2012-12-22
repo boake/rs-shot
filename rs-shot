@@ -29,7 +29,7 @@ if !file_list.empty?
   puts "Resaving screenshots with GIMP."
   `gimp -i -d -f -b '(resave-images "#{file_prefix}*.png")' -b '(gimp-quit 0)'`
   
-  puts "Moving screenshots back"
+  puts "Moving screenshots back."
   file_list.each{|file|
     FileUtils.mv(file, "../")
   }
