@@ -9,20 +9,20 @@ bloat_size = 2774103
 
 file_list = []
 
-Dir.glob("#{file_prefix}*.png").each {|file|
-  if File.stat(file).size == bloat_size
-    file_list.push(file)
-  end
-}
+Dir.glob("#{file_prefix}*.png").each do | file |
+  file_list.push(file) if File.stat(file).size == bloat_size
+end
 
-if !file_list.empty?
+if file_list.empty?
+  puts "There are no bloated screenshots in this directory."
+else
   tmp_dir = "shots-tmp-"+Time.now.to_i.to_s(32)
   Dir.mkdir(tmp_dir)
 
   puts "Moving bloated screenshots to tmp directory: #{tmp_dir}"
-  file_list.each {|file|
+  file_list.each do | file |
     FileUtils.mv(file, tmp_dir)
-  }
+  end
 
   Dir.chdir(tmp_dir)
 
@@ -30,12 +30,10 @@ if !file_list.empty?
   `gimp -i -d -f -b '(resave-images "#{file_prefix}*.png")' -b '(gimp-quit 0)'`
   
   puts "Moving screenshots back."
-  file_list.each{|file|
+  file_list.each do | file |
     FileUtils.mv(file, "../")
-  }
+  end
   Dir.chdir("../")
   Dir.delete(tmp_dir)
   puts "Done."
-else
-  puts "There are no bloated screenshots in this directory."
 end
