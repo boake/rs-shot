@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+require "time"
+require "fileutils"
+
+# Defaults
+file_prefix = "shot" # Default file prefix on mplayer.
+bloat_size = 2774103
+# 2774103 is the default bloated file size with mplayer; there are some strange exceptions.
+
+file_list = []
+
+Dir.glob("#{file_prefix}*.png").each {|file|
+  if File.stat(file).size == bloat_size
+    file_list.push(file)
+  end
+}
+
+if !file_list.empty?
+  tmp_dir = "shots-tmp-"+Time.now.to_i.to_s(32)
+  Dir.mkdir(tmp_dir)
+
+  puts "Moving bloated screenshots to tmp directory: #{tmp_dir}"
+  file_list.each {|file|
+    FileUtils.mv(file, tmp_dir)
+  }
+
+  Dir.chdir(tmp_dir)
+
+  puts "Resaving screenshots with gimp."
+  `gimp -i -d -f -b "(resave-images \"#{file_prefix}*.png\")" -b "(gimp-quit 0)"`
+  
+  puts "moving screenshots back"
+  file_list.each{|file|
+    FileUtils.mv(file, "../")
+  }
+  Dir.chdir("../")
+  Dir.delete(tmp_dir)
+  puts "Done."
+else
+  puts "There are no bloated screenshots in this directory."
+end
