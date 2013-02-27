@@ -5,7 +5,7 @@ require "fileutils"
 # Defaults
 file_prefix = "shot" # Default file prefix on mplayer.
 bloat_size = 2774103
-# 2774103 is the default bloated file size with mplayer; there are some strange exceptions.
+# The bloat size tends to be 2774103 for 1280x720 screenshots.
 
 file_list = []
 
